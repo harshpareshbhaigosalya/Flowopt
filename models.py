@@ -10,7 +10,7 @@ Data models for the FlowOpt AI Environment.
 This environment simulates a remote team workflow for optimization training.
 """
 
-from typing import Dict, List, Optional
+from typing import Dict, List, Optional, Any
 try:
     from openenv.core.env_server.types import Action, Observation
 except ImportError:
@@ -19,7 +19,8 @@ except ImportError:
     except ImportError:
         # Final fallback for older or dev versions
         from openenv import Action, Observation
-from pydantic import Field, BaseModel
+import json
+from pydantic import Field, BaseModel, model_validator
 
 
 class Task(BaseModel):
@@ -42,6 +43,20 @@ class FlowoptAction(Action):
     """Action for the FlowOpt environment."""
     priority_order: List[int] = Field(..., description="Ordered list of task IDs by priority")
     assignments: Dict[str, List[int]] = Field(..., description="Mapping of team member name to list of task IDs")
+
+    @model_validator(mode='before')
+    @classmethod
+    def validate_json_strings(cls, data: Any) -> Any:
+        """Attempt to parse strings as JSON for Web UI compatibility."""
+        if isinstance(data, dict):
+            for field_name in ['priority_order', 'assignments']:
+                val = data.get(field_name)
+                if isinstance(val, str) and val.strip():
+                    try:
+                        data[field_name] = json.loads(val)
+                    except (json.JSONDecodeError, TypeError):
+                        pass
+        return data
 
 
 class FlowoptObservation(Observation):
