@@ -11,7 +11,14 @@ This environment simulates a remote team workflow for optimization training.
 """
 
 from typing import Dict, List, Optional
-from openenv.core.env_server.types import Action, Observation
+try:
+    from openenv.core.env_server.types import Action, Observation
+except ImportError:
+    try:
+        from openenv.core.models import Action, Observation
+    except ImportError:
+        # Final fallback for older or dev versions
+        from openenv import Action, Observation
 from pydantic import Field, BaseModel
 
 
