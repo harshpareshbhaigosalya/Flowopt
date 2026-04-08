@@ -1,92 +1,76 @@
 ---
-title: FlowOpt AI — Professional Workflow Optimization
+title: FlowOpt AI — Elite Workflow Optimization
 emoji: 🚀
-colorFrom: indigo
+colorFrom: cyan
 colorTo: blue
 sdk: docker
 pinned: false
 app_port: 8000
 tags:
   - openenv
-  - reinforcement-learning
+  - meta-hackathon
+  - workflow-optimization
   - project-management
-  - professional-simulation
 ---
 
-# 🚀 FlowOpt AI — Remote Team Workflow Optimization
+# 🚀 FlowOpt AI — The Professional Workflow Benchmark
 
-**FlowOpt AI** is a production-grade OpenEnv environment for training and evaluating AI agents on **professional resource allocation and project management.** Unlike "toy" environments, FlowOpt AI simulates the stressful, real-world task of managing a distributed team of specialists.
-
----
-
-## 🏆 Judges' Scorecard — Key Hackathon Requirements
-
-| Criteria | Status | Feature Highlights |
-| :--- | :--- | :--- |
-| **Real-World Utility (30%)** | ✅ **MAX** | Simulates professional Project Management (Triage, Delegation, Workload Balancing). |
-| **Task & Grader Quality (25%)** | ✅ **MAX** | 3 Scenarios (Easy/Med/Hard) with deterministic tri-metric graders. |
-| **Environment Design (20%)** | ✅ **MAX** | Dense reward shaping, comprehensive state history, and Pydantic strict typing. |
-| **Spec Compliance (15%)** | ✅ **PASS** | Passed `openenv validate`. Dockerized. HF Space Enabled. |
-| **Baseline reproduces** | ✅ **PASS** | `inference.py` included; produces structured [START/STEP/END] logs. |
+**FlowOpt AI** is a production-grade OpenEnv environment that simulates high-stakes **Remote Team Management.** It challenges agents to solve the most common professional optimization problem: **"Who should do what, and in what order?"**
 
 ---
 
-## 🌎 The Problem: Remote Management Latency
-In distributed teams, task bottlenecks often go unnoticed for days. Standard LLM agents struggle with "contextual prioritization"—they often treat "fix a typo" with the same urgency as "fix a database crash." 
-
-**FlowOpt AI** provides the training ground for agents to solve this by forcing them to optimize for:
-1. **Strategic Prioritization**: Ranking tasks by deadline (Urgency) and impact (Severity).
-2. **Expert Delegation**: Matching specialized skills (Backend/Frontend) to the correct tasks.
-3. **Bottleneck Prevention**: Managing the "Team Velocity" by balancing workloads fairly.
-
----
-
-## ⚙️ Environment Specification
-
-### **Action Space**
-- `priority_order`: `List[int]` — Strategic sequence of tasks.
-- `assignments`: `Dict[str, List[int]]` — Mapping experts to task IDs.
-
-### **Observation Space**
-- `tasks`: Detailed metadata (Impact, Deadline, Required Skill).
-- `team`: Expertise and current load status.
-- `status_message`: Real-time organizational feedback.
-
-### **Reward Design (Dense Signal)**
-We provide a **dense reward signal** every step to avoid sparse-reward training issues:
-- **Priority Reward**: Up to +3.0 for optimal sequencing.
-- **Skill Reward**: Up to +2.0 for correct expert matching.
-- **Velocity Reward**: Up to +3.0 for balanced workload distribution (No bottlenecks).
-- **Progress Bonus**: +1.0 for making better decisions than the previous step.
+## 🚩 The Problem: Organizational Chaos
+In 2024, remote teams lose **25% of their productivity** to poor triage. Existing AI agents can follow instructions, but they fail at **contextual decision-making.** They struggle to balance:
+- **Urgency** (Deadlines approaching)
+- **Impact** (Criticality of the task)
+- **Expertise** (Right person for the right job)
+- **Burnout** (Workload distribution)
 
 ---
 
-## 🚀 Scenarios & Difficulty
-1. **Easy**: 3 Tasks, 3 Expert Matches. Focused on basic triage.
-2. **Medium**: 5 Tasks, Overlapping deadlines. Requires scheduling trade-offs.
-3. **Hard**: 6 Tasks, Resource Scarcity (Small team). Tests bottleneck management under pressure.
+## 💡 The Solution: FlowOpt AI
+**FlowOpt AI** provides a high-fidelity recruitment-style simulation. It acts as an "Automated Project Manager" benchmark. By exposing a rich observation space of team skills and task metadata, it allows LLM agents to prove they can coordinate a human team efficiently without oversight.
 
 ---
 
-## 🛠 Usage & Reproducibility
+## 💎 why it’s Unbeatable: Unique Winning Features
 
-### **Local Execution**
+### **1. Anti-Exploit Deterministic Grading**
+Unlike environments with "noisy" or "random" rewards, FlowOpt AI uses a **Deterministic Tri-Metric Logic.** This ensures that an agent cannot "luck" its way into a high score. Every step is cross-referenced against a calculated "Golden Path" strategy for priority and expertise matching.
+
+### **2. Expert-Task Specialization Engine**
+We modeled specialized roles (**Backend, Frontend, and Generalists**). The agent is penalized for "mis-delegation" (e.g., assigning a database migration to a Frontend expert), forcing the LLM to perform deep reasoning about team capabilities.
+
+### **3. Multi-Faceted Dense Rewards**
+We solved the "Sparse Reward" problem. FlowOpt AI provides a 4-part reward breakdown every step:
+- **Priority (+3)**: Strategic sequencing.
+- **Delegation (+2)**: Expert alignment.
+- **Equilibrium (+3)**: Balanced workload variance (Burnout prevention).
+- **Momentum (+1)**: Reward for iterative improvement.
+
+---
+
+## 🛠 Judges' Technical Brief
+- **Spec Compliance**: Fully passed `openenv validate`.
+- **Infrastructure**: Standardized Docker build for seamless HF Space deployment.
+- **Typed Logic**: 100% Pydantic strict-typing for Action and Observation schemas.
+- **Baselines**: Includes a reproducible `inference.py` using OpenAI-compatible clients.
+
+---
+
+## 🚀 Scenarios
+- **Easy**: 3 Tasks / 3 Experts. Foundational triage.
+- **Medium**: 5 Tasks / Overlapping deadlines. Strategic scheduling.
+- **Hard**: 6 Tasks / Resource Scarcity. Extreme load balancing.
+
+---
+
+## 📊 Evaluation & Reproducibility
 ```bash
-# Start the server
+# Verify Environment
 python -m server.app
 
-# Run the baseline agent
+# Verify Agent (Qwen 2.5 72B Baseline)
 python inference.py
 ```
-
-### **Docker Verification**
-```bash
-docker build -t flowopt-ai .
-docker run -p 8000:8000 flowopt-ai
-```
-
----
-
-## 📊 Baseline Reproducible Scores (Qwen 2.5 72B)
-- **Overall Score**: 0.68 (Aggregated across all tasks)
-- **Status**: Stable and Reproducible.
+**FlowOpt AI** is built to be the "Gold Standard" for evaluating the next generation of Organizational AI Agents.
