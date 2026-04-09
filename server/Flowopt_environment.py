@@ -34,6 +34,10 @@ class FlowoptEnvironment(Environment):
         {"id": "hard", "name": "Hard Resource Desert"},
     ]
 
+    def get_tasks(self) -> List[Dict[str, Any]]:
+        """Returns the list of available tasks for this environment."""
+        return self.TASKS
+
     def __init__(self):
         """Initialize the Flowopt environment."""
         self._reset_state()

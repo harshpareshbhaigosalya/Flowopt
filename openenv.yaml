@@ -8,10 +8,13 @@ tasks:
   - id: easy
     name: Easy Workflow Triage
     description: "Optimize 3 basic tasks with clear skill matches and balanced deadlines."
+    grader: true
   - id: medium
     name: Medium Priority Scheduling
     description: "Optimize 5 complex tasks with overlapping deadlines and conflicting impacts."
+    grader: true
   - id: hard
     name: Hard Resource Desert
     description: "Optimize 6 high-impact tasks with severe resource scarcity and extreme bottleneck risk."
+    grader: true
 
