@@ -170,7 +170,7 @@ async def main() -> None:
                 rewards.append(reward)
                 steps_taken = step
                 
-                log_step(step=step, action=json.dumps(action.dict()), reward=reward, done=done, error=None)
+                log_step(step=step, action=json.dumps(action.model_dump()), reward=reward, done=done, error=None)
 
                 if done:
                     break

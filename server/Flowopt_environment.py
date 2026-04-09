@@ -137,7 +137,7 @@ class FlowoptEnvironment(Environment):
         if len(self._history) > 0:
             if step_reward > self._history[-1]["reward"]:
                 p_bonus = 1.0
-            elif action.dict() == self._history[-1]["action"]:
+            elif action.model_dump() == self._history[-1]["action"]:
                 p_bonus = -1.0
         
         total_step_reward = step_reward + p_bonus
@@ -152,7 +152,7 @@ class FlowoptEnvironment(Environment):
         # Record history
         self._history.append({
             "step": self._step_count,
-            "action": action.dict(),
+            "action": action.model_dump(),
             "reward": normalized_reward,
             "breakdown": {
                 "priority": p_score,
