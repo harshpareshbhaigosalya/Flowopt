@@ -1,8 +1,8 @@
 ---
 title: FlowOpt AI — Elite Workflow Optimization
 emoji: 🚀
-colorFrom: cyan
-colorTo: blue
+colorFrom: blue
+colorTo: indigo
 sdk: docker
 pinned: false
 app_port: 8000
