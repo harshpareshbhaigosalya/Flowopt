@@ -44,8 +44,12 @@ app = create_app(
     FlowoptObservation,
     env_name="Flowopt",
     max_concurrent_envs=4,
-    grader_fn=FlowoptEnvironment.grader if FlowoptEnvironment else None,
 )
+
+@app.get("/tasks")
+async def get_all_tasks():
+    """Explicitly expose tasks for the validator."""
+    return FlowoptEnvironment.TASKS
 
 def main():
     """Main entry point."""
