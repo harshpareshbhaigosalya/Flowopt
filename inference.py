@@ -129,9 +129,15 @@ async def main() -> None:
     configured_task = os.getenv("TASK_ID")
     tasks_to_run = [configured_task] if configured_task and configured_task != "all" else ["easy", "medium", "hard"]
 
-    # Initialize environment
+    # Initialize environment with Docker fallback
+    env = None
     if IMAGE_NAME:
-        env = await FlowoptEnv.from_docker_image(IMAGE_NAME)
+        try:
+            print(f"[DEBUG] Attempting to start environment via Docker: {IMAGE_NAME}")
+            env = await FlowoptEnv.from_docker_image(IMAGE_NAME)
+        except Exception as e:
+            print(f"[DEBUG] Docker initialization failed: {e}. Falling back to local server.")
+            env = FlowoptEnv(base_url="http://localhost:8000")
     else:
         env = FlowoptEnv(base_url="http://localhost:8000")
 
