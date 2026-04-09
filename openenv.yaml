@@ -4,4 +4,14 @@ type: space
 runtime: fastapi
 app: server.app:app
 port: 8000
+tasks:
+  - id: easy
+    name: Easy Workflow Triage
+    description: "Optimize 3 basic tasks with clear skill matches and balanced deadlines."
+  - id: medium
+    name: Medium Priority Scheduling
+    description: "Optimize 5 complex tasks with overlapping deadlines and conflicting impacts."
+  - id: hard
+    name: Hard Resource Desert
+    description: "Optimize 6 high-impact tasks with severe resource scarcity and extreme bottleneck risk."
 

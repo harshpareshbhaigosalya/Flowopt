@@ -28,6 +28,11 @@ class FlowoptEnvironment(Environment):
     """
 
     SUPPORTS_CONCURRENT_SESSIONS: bool = True
+    TASKS = [
+        {"id": "easy", "name": "Easy Workflow Triage"},
+        {"id": "medium", "name": "Medium Priority Scheduling"},
+        {"id": "hard", "name": "Hard Resource Desert"},
+    ]
 
     def __init__(self):
         """Initialize the Flowopt environment."""
@@ -272,10 +277,11 @@ class FlowoptEnvironment(Environment):
             }
         )
 
-def grader(final_score: float, max_steps: int = 5) -> float:
-    """
-    Normalize final cumulative score to [0,1].
-    Since each step reward is already [0,1], max score = max_steps.
-    """
-    normalized = final_score / max_steps
-    return min(max(normalized, 0.0), 1.0)
+    @staticmethod
+    def grader(final_score: float, max_steps: int = 5) -> float:
+        """
+        Normalize final cumulative score to [0,1].
+        Since each step reward is already [0,1], max score = max_steps.
+        """
+        normalized = final_score / max_steps
+        return min(max(normalized, 0.0), 1.0)
