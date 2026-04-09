@@ -70,10 +70,11 @@ class FlowoptEnvironment(Environment):
     def _load_scenario(self, task_id: str):
         """Loads task scenarios for different difficulty levels."""
         if task_id == "easy" or task_id is None:
+            # FOCUS: Simple 1:1 expert matching
             self._tasks = [
-                Task(id=1, description="Fix critical Backend bug", deadline=1, impact=5, required_skill="Backend"),
-                Task(id=2, description="Draft Frontend mockup", deadline=5, impact=3, required_skill="Frontend"),
-                Task(id=3, description="Update general docs", deadline=10, impact=1, required_skill="General"),
+                Task(id=1, description="Critical Backend Crash", deadline=2, impact=5, required_skill="Backend"),
+                Task(id=2, description="UI Button Alignment", deadline=5, impact=2, required_skill="Frontend"),
+                Task(id=3, description="Weekly Documentation", deadline=10, impact=1, required_skill="General"),
             ]
             self._team = [
                 TeamMember(name="Alice", skill="Backend", workload=0),
@@ -81,32 +82,36 @@ class FlowoptEnvironment(Environment):
                 TeamMember(name="Charlie", skill="General", workload=0),
             ]
         elif task_id == "medium":
+            # FOCUS: Strategic Triage (Urgency vs Impact)
             self._tasks = [
-                Task(id=1, description="API Integration", deadline=2, impact=4, required_skill="Backend"),
-                Task(id=2, description="OAuth setup", deadline=3, impact=4, required_skill="Backend"),
-                Task(id=3, description="Frontend landing page", deadline=4, impact=3, required_skill="Frontend"),
-                Task(id=4, description="Write test suite", deadline=5, impact=2, required_skill="General"),
+                Task(id=1, description="API OAuth Fix", deadline=3, impact=4, required_skill="Backend"),
+                Task(id=2, description="Slow DB Query", deadline=3, impact=5, required_skill="Backend"), # Higher impact, same deadline
+                Task(id=3, description="Mobile Responsive Fix", deadline=4, impact=3, required_skill="Frontend"),
+                Task(id=4, description="Onboarding Draft", deadline=5, impact=2, required_skill="General"),
+                Task(id=5, description="Readme Update", deadline=5, impact=1, required_skill="General"), # Lower impact, same deadline
             ]
             self._team = [
-                TeamMember(name="Alice", skill="Backend", workload=0),
-                TeamMember(name="Bob", skill="Frontend", workload=0),
-                TeamMember(name="Charlie", skill="General", workload=0),
+                TeamMember(name="James", skill="Backend", workload=0),
+                TeamMember(name="Sarah", skill="Frontend", workload=0),
+                TeamMember(name="Alex", skill="General", workload=0),
             ]
         elif task_id == "hard":
+            # FOCUS: Executive Crisis (The Resource Desert)
+            # 7 Tasks but only 2 team members. The agent MUST ignore low impact tasks to succeed.
             self._tasks = [
-                Task(id=1, description="Database migration", deadline=1, impact=5, required_skill="Backend"),
-                Task(id=2, description="Security patch", deadline=2, impact=5, required_skill="Backend"),
-                Task(id=3, description="Frontend Dashboard", deadline=2, impact=4, required_skill="Frontend"),
-                Task(id=4, description="CDN Optimization", deadline=4, impact=3, required_skill="Backend"),
-                Task(id=5, description="Client feedback", deadline=6, impact=2, required_skill="General"),
-                Task(id=6, description="Knowledge base", deadline=10, impact=1, required_skill="General"),
+                Task(id=1, description="Core DB Migration", deadline=1, impact=5, required_skill="Backend"),
+                Task(id=2, description="Security Breach Patch", deadline=2, impact=5, required_skill="Backend"),
+                Task(id=3, description="Main Landing Page Down", deadline=2, impact=5, required_skill="Frontend"),
+                Task(id=4, description="Docker Registry Fix", deadline=3, impact=4, required_skill="Backend"),
+                Task(id=5, description="Client Support Tickets", deadline=6, impact=2, required_skill="General"),
+                Task(id=6, description="Newsletter Draft", deadline=10, impact=1, required_skill="General"),
+                Task(id=7, description="Internal Tool Maintenance", deadline=12, impact=1, required_skill="General"),
             ]
             self._team = [
-                TeamMember(name="Alice", skill="Backend", workload=0),
-                TeamMember(name="Bob", skill="Frontend", workload=0),
+                TeamMember(name="Expert_A", skill="Backend", workload=0),
+                TeamMember(name="Expert_B", skill="Frontend", workload=0),
             ]
         else:
-            # Default to easy if unknown
             self._load_scenario("easy")
 
     def step(self, action: FlowoptAction) -> FlowoptObservation:  # type: ignore[override]
