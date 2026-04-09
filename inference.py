@@ -123,57 +123,57 @@ def get_model_action(client: OpenAI, step: int, obs: Any) -> Optional[FlowoptAct
 
 async def main() -> None:
     # Initialize OpenAI client
-    # Note: For hackathon validation, the environment variables will be set.
     client = OpenAI(base_url=API_BASE_URL, api_key=API_KEY)
+
+    # Use the TASK_ID from environment or default to all 3 for the judge
+    configured_task = os.getenv("TASK_ID")
+    tasks_to_run = [configured_task] if configured_task and configured_task != "all" else ["easy", "medium", "hard"]
 
     # Initialize environment
     if IMAGE_NAME:
         env = await FlowoptEnv.from_docker_image(IMAGE_NAME)
     else:
-        # Fallback to local server if no image provided
         env = FlowoptEnv(base_url="http://localhost:8000")
 
-    history: List[str] = []
-    rewards: List[float] = []
-    steps_taken = 0
-    score = 0.0
-    success = False
-
-    log_start(task=TASK_NAME, env=BENCHMARK, model=MODEL_NAME)
-
     try:
-        # Use the TASK_ID from environment variables
-        task_id = os.getenv("TASK_ID", "easy")
-        reset_result = await env.reset(task_id=task_id) 
-        obs = reset_result.observation
+        for task_id in tasks_to_run:
+            rewards = []
+            steps_taken = 0
+            score = 0.0
+            success = False
 
-        for step in range(1, MAX_STEPS + 1):
-            if reset_result.done:
-                break
+            log_start(task=task_id, env=BENCHMARK, model=MODEL_NAME)
 
-            action = get_model_action(client, step, obs)
+            reset_result = await env.reset(task_id=task_id) 
+            obs = reset_result.observation
+
+            for step in range(1, MAX_STEPS + 1):
+                if reset_result.done:
+                    break
+
+                action = get_model_action(client, step, obs)
+                
+                if action is None:
+                    action = FlowoptAction(priority_order=[], assignments={})
+
+                step_result = await env.step(action)
+                obs = step_result.observation
+                reward = step_result.reward or 0.0
+                done = step_result.done
+
+                rewards.append(reward)
+                steps_taken = step
+                
+                log_step(step=step, action=json.dumps(action.dict()), reward=reward, done=done, error=None)
+
+                if done:
+                    break
+
+            score = sum(rewards) / MAX_TOTAL_REWARD if MAX_TOTAL_REWARD > 0 else 0.0
+            score = min(max(score, 0.0), 1.0)
+            success = score >= SUCCESS_SCORE_THRESHOLD
             
-            if action is None:
-                # Default empty action on failure
-                action = FlowoptAction(priority_order=[], assignments={})
-
-            step_result = await env.step(action)
-            obs = step_result.observation
-            reward = step_result.reward or 0.0
-            done = step_result.done
-
-            rewards.append(reward)
-            steps_taken = step
-            
-            log_step(step=step, action=json.dumps(action.dict()), reward=reward, done=done, error=None)
-
-            if done:
-                break
-
-        # Normalize score to [0, 1] across total episode possibility
-        score = sum(rewards) / MAX_TOTAL_REWARD if MAX_TOTAL_REWARD > 0 else 0.0
-        score = min(max(score, 0.0), 1.0)
-        success = score >= SUCCESS_SCORE_THRESHOLD
+            log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
 
     except Exception as e:
         print(f"[ERROR] Inference failed: {e}")
@@ -181,8 +181,7 @@ async def main() -> None:
         try:
             await env.close()
         except Exception as e:
-            print(f"[DEBUG] env.close() error: {e}", flush=True)
-        log_end(success=success, steps=steps_taken, score=score, rewards=rewards)
+            pass
 
 
 if __name__ == "__main__":
