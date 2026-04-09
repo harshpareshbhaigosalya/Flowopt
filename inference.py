@@ -142,8 +142,9 @@ async def main() -> None:
     log_start(task=TASK_NAME, env=BENCHMARK, model=MODEL_NAME)
 
     try:
-        # User requested support for task_id in reset
-        reset_result = await env.reset() 
+        # Use the TASK_ID from environment variables
+        task_id = os.getenv("TASK_ID", "easy")
+        reset_result = await env.reset(task_id=task_id) 
         obs = reset_result.observation
 
         for step in range(1, MAX_STEPS + 1):
